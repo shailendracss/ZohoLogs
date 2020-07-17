@@ -43,10 +43,15 @@ public class ZohoAutomation {
 				String work = xl.getValue(i, "WorkItem");
 				String time = xl.getValue(i, "Time");
 				
-				t.logTime(proj, job, work, date, time);
+				boolean flagUpdate = t.logTime(proj, job, work, date, time);
 				
-				CustomReporter.report(STATUS.INFO, "Updating Y in row "+(i+1));
-				xl.setValue(i, "filled", "y");
+				if (flagUpdate) {
+					CustomReporter.report(STATUS.INFO, "Updating Y in row "+(i+1));
+					xl.setValue(i, "filled", "y");
+				}else {
+					CustomReporter.report(STATUS.FAIL, "NOT Updating Y in row "+(i+1));
+				}
+				
 			}
 		}
 

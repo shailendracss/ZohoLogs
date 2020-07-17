@@ -10,7 +10,7 @@
 
 	<test name="TESTS">
 		<parameter name="sheetAbsPath" value="${sheetAbsPath}" />
-		<parameter name="environment" value="live" />
+		<parameter name="environment" value="${environment}" />
 		<parameter name="browser" value="chrome" />
 		<parameter name="platform" value="" />
 		<parameter name="user" value="USR" />

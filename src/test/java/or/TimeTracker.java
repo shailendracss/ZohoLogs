@@ -48,7 +48,7 @@ public class TimeTracker {
 		com.waitForElementTobe_Visible(select_ProjectName);
 	}
 	
-	public void logTime(String project, String job, String workItem, String date, String time) {
+	public boolean logTime(String project, String job, String workItem, String date, String time) {
 		CustomReporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | ");
 		openLogTimeForm();
 		searchAndFill(select_ProjectName, project);
@@ -57,7 +57,7 @@ public class TimeTracker {
 		com.sendKeys("Date", text_Date, date);
 		com.sendKeys("Time", text_Time, time);
 		com.click(btn_Save, "btn_Save");
-		com.waitForElementsTobe_Present(By.id("alert-success"));
+		return com.waitForElementsTobe_Present(By.id("alert-success"));
 	}
 
 	private void searchAndFill(WebElement select_Obj, String txt) {
