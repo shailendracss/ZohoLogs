@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.configData_Util.Util;
 import com.customReporting.CustomReporter;
 import com.driverManager.DriverFactory;
 import com.seleniumExceptionHandling.SeleniumMethods;
@@ -57,7 +56,9 @@ public class TimeTracker {
 		com.sendKeys("Date", text_Date, date);
 		com.sendKeys("Time", text_Time, time);
 		com.click(btn_Save, "btn_Save");
-		return com.waitForElementsTobe_Present(By.id("alert-success"));
+		com.waitForElementsTobe_Present(By.id("alert-success"));
+		
+		return !com.isClickable(select_ProjectName,0);
 	}
 
 	private void searchAndFill(WebElement select_Obj, String txt) {

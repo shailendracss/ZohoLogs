@@ -1,6 +1,5 @@
 package or;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -45,6 +44,8 @@ public class Login {
 	public void performLogin(String type) {
 		//com.navigateToAndVerifyPageTitle(link_Login,loginPagetitle);
 		
+		
+		CustomReporter.report(STATUS.INFO, "xl file path " + Constant.getTestDataFilePath());
 		
 		String user = "";
 		String pass = "";

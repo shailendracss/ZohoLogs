@@ -786,6 +786,80 @@ public class SeleniumMethods extends SelectCustom {
 		}
 		return bool;
 	}
+	
+	public boolean isClickable(Object element) {
+		return isClickable(element, Constant.wait, "");
+	}
+	public boolean isClickable(Object element, long timeOutInSeconds) {
+		return isClickable(element, timeOutInSeconds, "");
+	}
+	public boolean isClickable(Object element, String desc) {
+		return isClickable(element, Constant.wait, desc);
+	}
+
+	/**
+	 * 
+	 * <table border="1">
+	 * 	<tbody>
+	 * 		<tr>
+	 * 			<th>Element Clickable</th><th>Timeout</th><th>Return</th>
+	 * 		</tr>
+	 * 		<tr>
+	 * 			<td>Yes</td><td>No</td><td>True</td>
+	 * 		</tr>
+	 * 		<tr>
+	 * 			<td>No</td><td>Yes</td><td>False</td>
+	 * 		</tr>
+	 * 	</tbody>
+	 * </table>
+	 * 
+	 * An expectation for checking that the element is clickable, 
+	 * and it will wait for passed seconds.
+	 * 
+	 * <b>Will not throw/report exception[will return only true/false]</b>
+	 * 
+	 * Will take Snapshot, Will run the Reporter
+	 *
+	 * @param element
+	 *            The By/WebElement Object
+	 * @param timeOutInSeconds
+	 *            Seconds to wait before returning false
+	 * @param desc
+	 *            element description to be display in report
+	 * @return true - element got deleted within timeout, false - element is
+	 *         still visible after timeout
+	 */
+	public boolean isClickable(Object element, long timeOutInSeconds, String desc) {
+
+		boolean bool = false;
+		StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+		String methodName = ste[1].getMethodName();
+		WebDriver driver = DriverFactory.getDriver();
+		try {
+			driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+			WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+			if (element instanceof By) {
+				wait.until(ExpectedConditions.elementToBeClickable((By) element));
+			} else if (element instanceof WebElement) {
+				wait.until(ExpectedConditions.elementToBeClickable((WebElement) element));
+			}
+			bool = true;
+		} catch (Exception e) {
+			// new CustomExceptionHandler(e);
+		} finally {
+			SnapshotManager.takeSnapShot(methodName);
+			driver.manage().timeouts().implicitlyWait(Constant.implicitWait, TimeUnit.SECONDS);
+			if (!desc.equals("")) {
+				if (bool) {
+					CustomReporter.report(STATUS.PASS, "Element " + desc + " is clickable");
+				} else {
+					CustomReporter.report(STATUS.FAIL, "Element " + desc
+							+ " is NOT Clickable even after waiting for '" + timeOutInSeconds + "' seconds");
+				}
+			}
+		}
+		return bool;
+	}
 
 	/**
 	 * Move back a single "item" in the browser's history.
@@ -1538,7 +1612,7 @@ public class SeleniumMethods extends SelectCustom {
 		}
 		return bool;
 	}
-
+	
 	/**
 	 * 
 	 * <table border="1">

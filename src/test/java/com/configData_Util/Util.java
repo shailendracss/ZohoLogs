@@ -28,7 +28,7 @@ public class Util {
 		try {
 			String platform = getOSName();
 			if (platform.toLowerCase().contains("win")) {
-				System.out.println("Killing Excel Process on " + platform);
+				CustomReporter.report(STATUS.INFO,"Killing Excel Process on " + platform);
 				Runtime.getRuntime().exec("cmd /c taskkill /f /im EXCEL.EXE");
 			}
 		} catch (Exception e) {

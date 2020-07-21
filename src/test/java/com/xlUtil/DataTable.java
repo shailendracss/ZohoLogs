@@ -35,6 +35,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.configData_Util.Util;
 import com.seleniumExceptionHandling.CustomExceptionHandler;
 
 @ThreadSafe
@@ -443,6 +444,7 @@ class DataTableWriter{
 	}	
 
 	public static synchronized void setValue(DataTable tab, int rowNum,int colNum,String data){
+		Util.killExcelProcess();
 		init(tab);
 		row = sheet.getRow(rowNum);
 		if (row == null) {
@@ -460,6 +462,7 @@ class DataTableWriter{
 	}
 
 	public static synchronized void setValue(DataTable tab,int rowNum,String colName,String data){
+		Util.killExcelProcess();
 		init(tab);
 		int colNum=tab.getColumnHeaderNum(colName);
 		row=sheet.getRow(rowNum);
