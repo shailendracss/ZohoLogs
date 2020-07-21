@@ -31,7 +31,7 @@ public class ZohoAutomation {
 		for (int i = 0; i < rowCount; i++) {
 			
 			
-			  if (i==0) { break; }
+			 // if (i==0) { break; }
 			 
 			
 			String fill = xl.getValue(i, "filled");
@@ -54,6 +54,8 @@ public class ZohoAutomation {
 				
 			}
 		}
+		
+		d.logout();
 
 	}
 }

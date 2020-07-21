@@ -16,6 +16,12 @@ public class Dashboard {
 	@FindBy(xpath = "//span[.='Time Tracker']")
 	private WebElement link_TimeTracker;
 	
+	@FindBy(id = "zpeople_userimage")
+	private WebElement img_User;
+
+	@FindBy(linkText = "Sign Out")
+	private WebElement link_Signout;
+	
 	SeleniumMethods com;
 
 	public Dashboard() {
@@ -25,6 +31,12 @@ public class Dashboard {
 
 	public void openTimeTrackerPage() {
 		com.click_UsingAction(link_TimeTracker, "link_TimeTracker");
+	}
+
+	public void logout() {
+		com.click(img_User, "User's Image");
+		com.wait(2);
+		com.navigateToAndVerifyPageUrl(link_Signout, "logout");
 	}
 
 }

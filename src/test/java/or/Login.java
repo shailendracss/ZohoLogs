@@ -43,7 +43,7 @@ public class Login {
 	
 	
 	public void performLogin(String type) {
-		com.navigateToAndVerifyPageTitle(link_Login,loginPagetitle);
+		//com.navigateToAndVerifyPageTitle(link_Login,loginPagetitle);
 		
 		
 		String user = "";
@@ -94,8 +94,9 @@ public class Login {
 		
 		CustomReporter.createNode("Loading Zoho URL");
 		
-		DataTable dataTable = new DataTable(Constant.getTestDataFilePath(), SHEET_NAME);
-		String baseUrl = dataTable.getValue(1, "url"); 
+		//DataTable dataTable = new DataTable(Constant.getTestDataFilePath(), SHEET_NAME);
+		//String baseUrl = dataTable.getValue(1, "url"); 
+		String baseUrl = "https://accounts.zoho.in/signin?servicename=zohopeople&signupurl=https://www.zoho.in/people/signup.html" ; 
 		com.get(baseUrl);
 		CustomReporter.report(STATUS.INFO, "Fired up url: "+"<br/><b style='font-size: small;'>"+baseUrl+"</b>");
 		
