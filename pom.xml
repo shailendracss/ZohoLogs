@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>Automation</groupId>
-	<artifactId>ZohoLogs</artifactId>
+	<groupId>com.automation</groupId>
+	<artifactId>zohologs</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -169,9 +169,9 @@
 						<artifactId>driver-binary-downloader-maven-plugin</artifactId>
 						<version>${driver-binary-downloader-maven-plugin.version}</version>
 						<configuration>
-							<rootStandaloneServerDirectory>${project.basedir}/ServerExes/selenium_standalone_binaries</rootStandaloneServerDirectory>
-							<downloadedZipFileDirectory>${project.basedir}/ServerExes/selenium_standalone_zips</downloadedZipFileDirectory>
-							<customRepositoryMap>${project.basedir}/TestData/RepositoryMap.xml</customRepositoryMap>
+							<rootStandaloneServerDirectory>${project.basedir}/DriverBinaries/selenium_standalone_binaries</rootStandaloneServerDirectory>
+							<downloadedZipFileDirectory>${project.basedir}/DriverBinaries/selenium_standalone_zips</downloadedZipFileDirectory>
+							<customRepositoryMap>${project.basedir}/Resources/RepositoryMap.xml</customRepositoryMap>
 							<overwriteFilesThatExist>${overwrite.binaries}</overwriteFilesThatExist>
 							<onlyGetDriversForHostOperatingSystem>true</onlyGetDriversForHostOperatingSystem>
 							<fileDownloadRetryAttempts>${retry.attempts}</fileDownloadRetryAttempts>

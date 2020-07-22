@@ -6,9 +6,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.customReporting.CustomReporter;
-import com.driverManager.DriverFactory;
-import com.seleniumExceptionHandling.SeleniumMethods;
+import com.reporting.Reporter;
+import com.selenium.SeleniumMethods;
+import com.selenium.webdriver.DriverFactory;
 
 public class TimeTracker {
 	private SeleniumMethods com;
@@ -48,7 +48,7 @@ public class TimeTracker {
 	}
 	
 	public boolean logTime(String project, String job, String workItem, String date, String time) {
-		CustomReporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | ");
+		Reporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | ");
 		openLogTimeForm();
 		searchAndFill(select_ProjectName, project);
 		searchAndFill(select_JobName, job);

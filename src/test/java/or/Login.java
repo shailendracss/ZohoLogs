@@ -5,16 +5,16 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.configData_Util.Constant;
-import com.configData_Util.STATUS;
-import com.customReporting.CustomReporter;
-import com.driverManager.DriverFactory;
-import com.seleniumExceptionHandling.SeleniumMethods;
-import com.xlUtil.DataTable;
+import com.reporting.Reporter;
+import com.reporting.STATUS;
+import com.selenium.SeleniumMethods;
+import com.selenium.webdriver.DriverFactory;
+import com.util.Constant;
+import com.xl.ExcelManager;
 
 public class Login {
 
-	private static final String loginPagetitle = "Zoho Accounts";
+	public static final String title = "Zoho Accounts";
 	
 	private static final String SHEET_NAME = Constant.getEnvironmentInfoSheet();
 	
@@ -45,13 +45,13 @@ public class Login {
 		//com.navigateToAndVerifyPageTitle(link_Login,loginPagetitle);
 		
 		
-		CustomReporter.report(STATUS.INFO, "xl file path " + Constant.getTestDataFilePath());
+		Reporter.report(STATUS.INFO, "xl file path " + Constant.getTestDataFilePath());
 		
 		String user = "";
 		String pass = "";
 		String userMap = "";
 
-		DataTable DataTable = new DataTable(Constant.getTestDataFilePath(), SHEET_NAME);
+		ExcelManager DataTable = new ExcelManager(Constant.getTestDataFilePath(), SHEET_NAME);
 		int rowCount = DataTable.getRowCount();
 		int credentialsRow = -1;
 		for (int row = 1; row < rowCount; row++) {
@@ -66,7 +66,7 @@ public class Login {
 			user = DataTable.getValue(credentialsRow, "username");
 			pass = DataTable.getValue(credentialsRow, "password");
 		} else {
-			CustomReporter.report(STATUS.FAIL, "Passsed user type '" + type + "' is not present in the test data sheet "
+			Reporter.report(STATUS.FAIL, "Passsed user type '" + type + "' is not present in the test data sheet "
 					+ SHEET_NAME);
 		}
 		
@@ -82,9 +82,9 @@ public class Login {
 		com.waitForElementTobe_NotVisible(d.peopleLoader);
 		
 		if (com.verifyPageTitle(Dashboard.title)) {
-			CustomReporter.report(STATUS.PASS, "Login succeed with user id: " + userMap + " and username: " + user);
+			Reporter.report(STATUS.PASS, "Login succeed with user id: " + userMap + " and username: " + user);
 		} else {
-			CustomReporter.report(STATUS.PASS,
+			Reporter.report(STATUS.PASS,
 					"Login Failed with user mapping id: " + userMap + " and username: " + user);
 			Assert.fail("Login Failed with user mapping id: " + userMap + " and username: " + user);
 		}
@@ -93,13 +93,13 @@ public class Login {
 
 	public Login load_App_URL() {
 		
-		CustomReporter.createNode("Loading Zoho URL");
+		Reporter.createNode("Loading Zoho URL");
 		
 		//DataTable dataTable = new DataTable(Constant.getTestDataFilePath(), SHEET_NAME);
 		//String baseUrl = dataTable.getValue(1, "url"); 
 		String baseUrl = "https://accounts.zoho.in/signin?servicename=zohopeople&signupurl=https://www.zoho.in/people/signup.html" ; 
 		com.get(baseUrl);
-		CustomReporter.report(STATUS.INFO, "Fired up url: "+"<br/><b style='font-size: small;'>"+baseUrl+"</b>");
+		Reporter.report(STATUS.INFO, "Fired up url: "+"<br/><b style='font-size: small;'>"+baseUrl+"</b>");
 		
 		return this;
 	}

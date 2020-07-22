@@ -3,7 +3,7 @@
 	parallel="methods">
 	<parameter name="remoteURL" value="" /><!-- http://192.168.0.181:4444/wd/hub -->
 	<listeners>
-		<listener class-name="com.testNgListener.CustomListener_HMap" />
+		<listener class-name="com.listener.CustomListener" />
 	</listeners>
 
 	<!-- ${environment} -->

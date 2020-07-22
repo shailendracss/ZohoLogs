@@ -11,9 +11,9 @@ import java.util.List;
 
 import org.testng.Assert;
 
-import com.configData_Util.STATUS;
-import com.customReporting.CustomReporter;
-import com.seleniumExceptionHandling.CustomExceptionHandler;
+import com.reporting.Reporter;
+import com.reporting.STATUS;
+import com.selenium.CustomExceptionHandler;
 
 public class ConnectionManager {
 
@@ -79,7 +79,7 @@ public class ConnectionManager {
 			try {
 				con.close();
 				con = null;
-				CustomReporter.report(STATUS.INFO, "Connection closed");
+				Reporter.report(STATUS.INFO, "Connection closed");
 			} catch (SQLException e) {
 				new CustomExceptionHandler(e);
 			}
@@ -97,10 +97,10 @@ public class ConnectionManager {
 	private static synchronized void createConnection() {
 		if (con == null) {
 			try {
-				CustomReporter.createNode("Connecting with DataBase");
+				Reporter.createNode("Connecting with DataBase");
 				Class.forName(FOR_NAME);
 				con = DriverManager.getConnection(URL, USER, PASSWORD);
-				CustomReporter.report(STATUS.INFO, "Connection successfull, make sure to close the connection");
+				Reporter.report(STATUS.INFO, "Connection successfull, make sure to close the connection");
 			} catch (Exception e) {
 				new CustomExceptionHandler(e);
 				Assert.fail(e.getMessage());

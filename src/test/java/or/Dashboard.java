@@ -5,8 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.driverManager.DriverFactory;
-import com.seleniumExceptionHandling.SeleniumMethods;
+import com.selenium.SeleniumMethods;
+import com.selenium.webdriver.DriverFactory;
 
 public class Dashboard {
 	public static final String title = "Zoho People";

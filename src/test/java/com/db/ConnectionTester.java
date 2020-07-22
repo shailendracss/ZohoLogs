@@ -1,6 +1,6 @@
 package com.db;
 
-import com.configData_Util.Constant;
+import com.util.Constant;
 
 public class ConnectionTester {
 	

@@ -2,10 +2,10 @@ package tests;
 
 import org.testng.annotations.Test;
 
-import com.configData_Util.Constant;
-import com.configData_Util.STATUS;
-import com.customReporting.CustomReporter;
-import com.xlUtil.DataTable;
+import com.reporting.Reporter;
+import com.reporting.STATUS;
+import com.util.Constant;
+import com.xl.ExcelManager;
 
 import or.Dashboard;
 import or.TimeTracker;
@@ -22,7 +22,7 @@ public class ZohoAutomation {
 		Dashboard d = new Dashboard();
 		d.openTimeTrackerPage();
 
-		DataTable xl = new DataTable(Constant.getTestDataFilePath(), "TimeLogs");
+		ExcelManager xl = new ExcelManager(Constant.getTestDataFilePath(), "TimeLogs");
 
 		TimeTracker t = new TimeTracker();
 		
@@ -46,10 +46,10 @@ public class ZohoAutomation {
 				boolean flagUpdate = t.logTime(proj, job, work, date, time);
 				
 				if (flagUpdate) {
-					CustomReporter.report(STATUS.INFO, "Updating Y in row "+(i+1));
+					Reporter.report(STATUS.INFO, "Updating Y in row "+(i+1));
 					xl.setValue(i, "filled", "y");
 				}else {
-					CustomReporter.report(STATUS.FAIL, "NOT Updating Y in row "+(i+1));
+					Reporter.report(STATUS.FAIL, "NOT Updating Y in row "+(i+1));
 				}
 				
 			}
