@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import com.reporting.Reporter;
 import com.selenium.SeleniumMethods;
 import com.selenium.webdriver.DriverFactory;
+import com.xl.ExcelManager;
 
 public class TimeTracker {
 	private SeleniumMethods com;
@@ -58,13 +59,17 @@ public class TimeTracker {
 		searchAndFill(select_WorkItem, workItem);
 		com.sendKeys("Date", text_Date, date);
 		com.sendKeys("Time", text_Time, time);
-		com.sendKeys("Desc",text_Desc, desc);
+	
+		if(!"".trim().equals(desc)) {
+			com.sendKeys("Desc",text_Desc, desc);
+		}
+		
 		com.click(btn_Save, "btn_Save");
 		com.waitForElementsTobe_Present(By.id("alert-success"));
 		
 		return !com.isClickable(select_ProjectName,0);
 	}
-
+	
 	private void searchAndFill(WebElement select_Obj, String txt) {
 		com.click_UsingAction(select_Obj);
 		
