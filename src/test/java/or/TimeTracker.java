@@ -33,9 +33,12 @@ public class TimeTracker {
 	
 	@FindBy(name = "Date")
 	private WebElement text_Date;
-	
+
 	@FindBy(id = "timelog_hrstime")
 	private WebElement text_Time;
+	
+	@FindBy(name = "Description")
+	private WebElement text_Desc;
 	
 	@FindBy(xpath = "//button[.='Save']")
 	private WebElement btn_Save;
@@ -47,14 +50,15 @@ public class TimeTracker {
 		com.waitForElementTobe_Visible(select_ProjectName);
 	}
 	
-	public boolean logTime(String project, String job, String workItem, String date, String time) {
-		Reporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | ");
+	public boolean logTime(String project, String job, String workItem, String date, String time, String desc) {
+		Reporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | " + desc);
 		openLogTimeForm();
 		searchAndFill(select_ProjectName, project);
 		searchAndFill(select_JobName, job);
 		searchAndFill(select_WorkItem, workItem);
 		com.sendKeys("Date", text_Date, date);
 		com.sendKeys("Time", text_Time, time);
+		com.sendKeys("Desc",text_Desc, desc);
 		com.click(btn_Save, "btn_Save");
 		com.waitForElementsTobe_Present(By.id("alert-success"));
 		
@@ -68,6 +72,6 @@ public class TimeTracker {
 		
 		com.click_UsingAction(By.xpath("//div[contains(.,'"+txt+"')][contains(@class,'label')]"), txt);
 		
-		com.sendKeys(By.name("Description"), Keys.ESCAPE);
+		com.sendKeys(text_Desc, Keys.ESCAPE);
 	}
 }

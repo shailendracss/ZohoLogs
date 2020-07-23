@@ -42,8 +42,9 @@ public class ZohoAutomation {
 				String job = xl.getValue(i, "JobName");
 				String work = xl.getValue(i, "WorkItem");
 				String time = xl.getValue(i, "Time");
+				String desc = xl.getValue(i, "Desc");
 				
-				boolean flagUpdate = t.logTime(proj, job, work, date, time);
+				boolean flagUpdate = t.logTime(proj, job, work, date, time, desc);
 				
 				if (flagUpdate) {
 					Reporter.report(STATUS.INFO, "Updating Y in row "+(i+1));
