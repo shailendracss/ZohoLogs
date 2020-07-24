@@ -11,7 +11,6 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebElement;
@@ -1789,7 +1788,7 @@ public class SeleniumMethods extends SelectCustom {
 	 * @return true - element is located and visible, false - element is not
 	 *         visible within the passed timeout value
 	 *         
-	 * @throws TimeoutException
+	 * @throws Nothing
 	 */
 	public boolean waitForElementTobe_Visible(Object element, long timeoutSeconds, String desc) {
 		boolean bool = false;
@@ -1805,7 +1804,7 @@ public class SeleniumMethods extends SelectCustom {
 			}
 			bool = true;
 		} catch (Exception e) {
-			new CustomExceptionHandler(e);
+			//new CustomExceptionHandler(e);
 		} finally {
 			SnapshotManager.takeSnapShot(methodName);
 			if (!desc.equals("")) {

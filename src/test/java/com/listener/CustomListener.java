@@ -17,8 +17,8 @@ import org.testng.ITestResult;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.mail.MailManager;
-import com.reporting.Reporter;
 import com.reporting.ExtentManager;
+import com.reporting.Reporter;
 import com.reporting.ReportingHistoryManager;
 import com.reporting.STATUS;
 import com.reporting.TestRunHistoryManager;
@@ -29,6 +29,7 @@ import com.selenium.webdriver.DriverFactory;
 import com.util.Constant;
 import com.util.Util;
 
+import or.Dashboard;
 import or.Login;
 
 public class CustomListener implements ITestListener,IExecutionListener{
@@ -76,6 +77,7 @@ public class CustomListener implements ITestListener,IExecutionListener{
 		testName = testDataMap.get(TestNGKeys.test);
 		Constant.setEnvironmentInfoSheet(testDataMap.get(TestNGKeys.environment));
 		Constant.setTestDataFilePath(testDataMap.get(TestNGKeys.sheetAbsPath));
+		Constant.setCheckOutFlag(testDataMap.get(TestNGKeys.enableCheckout));
 
 		extentReport = ExtentManager.GetExtentReports(testDataMap);
 		Reporter.onStart(testDataMap);
@@ -154,7 +156,9 @@ public class CustomListener implements ITestListener,IExecutionListener{
 	public void onTestSuccess(ITestResult result){
 		//System.out.println("onTestSuccess "+Thread.currentThread().getId());
 		
-		HashMap<TestNGKeys,String> testDataMap=INIT_TEST_DATA_MAP(result);
+		new Dashboard().logout();
+		
+		//HashMap<TestNGKeys,String> testDataMap=INIT_TEST_DATA_MAP(result);
 		
 		String moviePath=SnapshotsMovieMaker.createMovie(SnapshotManager.getSnapshotDestinationDirectory());
 		Reporter.onTestEnd_NonXl(moviePath);
@@ -185,9 +189,10 @@ public class CustomListener implements ITestListener,IExecutionListener{
 	 */
 	public void onTestFailure(ITestResult result) {
 		
+		new Dashboard().logout();
 		
 		//System.out.println("onTestFailure "+Thread.currentThread().getId());
-		HashMap<TestNGKeys,String> testDataMap=INIT_TEST_DATA_MAP(result);
+		//HashMap<TestNGKeys,String> testDataMap=INIT_TEST_DATA_MAP(result);
 		
 		result.getThrowable().printStackTrace();
 		String readableStackTrace=result.getThrowable().getMessage();
@@ -267,6 +272,8 @@ public class CustomListener implements ITestListener,IExecutionListener{
 		testDataMap.put(TestNGKeys.suite, context.getSuite().getName());
 		testDataMap.put(TestNGKeys.test, context.getCurrentXmlTest().getName());
 		testDataMap.put(TestNGKeys.sheetAbsPath, context.getCurrentXmlTest().getParameter(TestNGKeys.sheetAbsPath.value));
+		testDataMap.put(TestNGKeys.enableCheckout, context.getCurrentXmlTest().getParameter(TestNGKeys.enableCheckout.value));
+		
 		return testDataMap;
 	}
 	

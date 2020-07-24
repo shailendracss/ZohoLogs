@@ -166,6 +166,7 @@ public class Constant {
 	private static final String dbQueriesFolderName = "db_queries";
 	private static final String testDataFileName = "ZohoLogs.xlsx";
 	private static String testDataFilePath = System.getProperty("user.home")+"/Desktop/" + testDataFileName;
+	private static String enableCheckout = "N";
 	public static final String snapshotsMovieTemplateName = "snapshotsMovieTemplate.html";
 	public static final String reportRedesignTemplateName = "Report_Redesign_Template.html";
 	public static final String historyReportRedesignTemplateName = "page.html";
@@ -389,5 +390,12 @@ public class Constant {
 		return val;
 	}
 
+	public static void setCheckOutFlag(String flag) {
+		if(null != flag && !flag.equals("") && !flag.contains("${enableCheckout}")) 
+			enableCheckout = flag;
+	}
+	public static String getCheckOutFlag() {
+		return enableCheckout;
+	}
 
 }

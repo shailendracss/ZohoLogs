@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="SUITE" verbose="1" thread-count="1"
+<suite name="SUITE_DEV" verbose="1" thread-count="1"
 	parallel="methods">
 	<parameter name="remoteURL" value="" /><!-- http://192.168.0.181:4444/wd/hub -->
 	<listeners>
@@ -8,8 +8,8 @@
 
 	<!-- ${environment} -->
 
-	<test name="TESTS">
-		<parameter name="enableCheckout" value="${enableCheckout}" />
+	<test name="TESTS_DEV">
+		<parameter name="enableCheckout" value="Y" />
 		<parameter name="sheetAbsPath" value="${sheetAbsPath}" />
 		<parameter name="environment" value="${environment}" />
 		<parameter name="browser" value="chrome" />

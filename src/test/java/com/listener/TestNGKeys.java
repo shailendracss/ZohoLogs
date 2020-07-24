@@ -18,7 +18,10 @@ public enum TestNGKeys {
 	group("group"),
 	dependsOn("dependsOn"), 
 	threadCount("threadCount"), 
-	sheetAbsPath("sheetAbsPath");
+	sheetAbsPath("sheetAbsPath"), 
+	enableCheckout("enableCheckout")
+	;
+	
 	
 	public String value;  
 	private TestNGKeys(String value){  

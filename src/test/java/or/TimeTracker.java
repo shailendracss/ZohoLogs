@@ -9,7 +9,6 @@ import org.openqa.selenium.support.PageFactory;
 import com.reporting.Reporter;
 import com.selenium.SeleniumMethods;
 import com.selenium.webdriver.DriverFactory;
-import com.xl.ExcelManager;
 
 public class TimeTracker {
 	private SeleniumMethods com;
@@ -53,11 +52,19 @@ public class TimeTracker {
 	
 	public boolean logTime(String project, String job, String workItem, String date, String time, String desc) {
 		Reporter.createNode("Creating time log for | "+date+" | "+project+" | "+job+" | "+workItem+" | "+time+" | " + desc);
+		
 		openLogTimeForm();
+		
 		searchAndFill(select_ProjectName, project);
+		
 		searchAndFill(select_JobName, job);
-		searchAndFill(select_WorkItem, workItem);
+		
+		if(!"".trim().equals(workItem)) {
+			searchAndFill(select_WorkItem, workItem);
+		}	
+		
 		com.sendKeys("Date", text_Date, date);
+		
 		com.sendKeys("Time", text_Time, time);
 	
 		if(!"".trim().equals(desc)) {
@@ -65,6 +72,7 @@ public class TimeTracker {
 		}
 		
 		com.click(btn_Save, "btn_Save");
+		
 		com.waitForElementsTobe_Present(By.id("alert-success"));
 		
 		return !com.isClickable(select_ProjectName,0);

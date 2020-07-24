@@ -14,12 +14,17 @@ public class ZohoAutomation {
 
 	@Test
 	private void createJobs() {
+		Dashboard d = new Dashboard();
 
+		d.doCheckout();
 	}
 
 	@Test
 	private void fillTimeLog() {
 		Dashboard d = new Dashboard();
+		
+		d.doCheckout();
+		
 		d.openTimeTrackerPage();
 
 		ExcelManager xl = new ExcelManager(Constant.getTestDataFilePath(), "TimeLogs");
@@ -56,7 +61,6 @@ public class ZohoAutomation {
 			}
 		}
 		
-		d.logout();
-
+		d.doCheckout();
 	}
 }
