@@ -13,8 +13,8 @@ import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.Proxy.ProxyType;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -25,44 +25,53 @@ import com.selenium.CustomExceptionHandler;
 import com.util.Constant;
 
 public class DriverFactory {
-	
+
 	static Map<Integer, WebDriver> driverList = new HashMap<Integer, WebDriver>();
 	private static WebDriver driver = null;
 
 	public static WebDriver getDriver() {
-		//SessionId session = ((ChromeDriver)driverList.get((int) (long) (Thread.currentThread().getId()))).getSessionId();
-		//System.out.println(Thread.currentThread().getId()+ " Session Id "+ session.toString());
+		// SessionId session = ((ChromeDriver)driverList.get((int) (long)
+		// (Thread.currentThread().getId()))).getSessionId();
+		// System.out.println(Thread.currentThread().getId()+ " Session Id "+
+		// session.toString());
 		return driverList.get((int) (long) (Thread.currentThread().getId()));
 	}
 
 	public static synchronized void setUp(HashMap<TestNGKeys, String> testData) {
-		driver = initiateDriver(testData.get(TestNGKeys.remoteURL),testData.get(TestNGKeys.browser),testData.get(TestNGKeys.platform));
-		
-		
-		Capabilities cap=((RemoteWebDriver)driver).getCapabilities();
-		Reporter.report(STATUS.INFO, "BROWSER DETAILS: "+"<br/><br/><b style='font-size: small;'>"+cap.asMap().toString()+"</b>");
-		
-		// String baseUrl = new DataTable(Constant.getTestDataFilePath(), Constant.get_HCM_EnvironmentInfoSheet()).getValue( 1, "url");
-		
-		/* In case of Qlik application we have to keep the resolution fix among all platfoms */
-		driver.manage().window().setSize(new Dimension(Constant.width,Constant.height));
-		//driver.manage().window().maximize();
-		if(Constant.implicitWait>0){
-			driver.manage().timeouts().implicitlyWait(Constant.implicitWait,TimeUnit.SECONDS);
+		driver = initiateDriver(testData.get(TestNGKeys.remoteURL), testData.get(TestNGKeys.browser),
+				testData.get(TestNGKeys.platform));
+
+		Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+		Reporter.report(STATUS.INFO,
+				"BROWSER DETAILS: " + "<br/><br/><b style='font-size: small;'>" + cap.asMap().toString() + "</b>");
+
+		// String baseUrl = new DataTable(Constant.getTestDataFilePath(),
+		// Constant.get_HCM_EnvironmentInfoSheet()).getValue( 1, "url");
+
+		/*
+		 * In case of Qlik application we have to keep the resolution fix among all
+		 * platfoms
+		 */
+		driver.manage().window().setSize(new Dimension(Constant.width, Constant.height));
+		// driver.manage().window().maximize();
+		if (Constant.implicitWait > 0) {
+			driver.manage().timeouts().implicitlyWait(Constant.implicitWait, TimeUnit.SECONDS);
 		}
-		
+
 		// driver.get(baseUrl);
-		// CustomReporter.report(STATUS.INFO, "Fired up url: "+"<br/><b style='font-size: small;'>"+baseUrl+"</b>");
+		// CustomReporter.report(STATUS.INFO, "Fired up url: "+"<br/><b
+		// style='font-size: small;'>"+baseUrl+"</b>");
 	}
 
 	public static void tearDown() {
-		//System.out.println("Driver quit for Thread: "+Thread.currentThread().getId() + getDriver().getTitle());
+		// System.out.println("Driver quit for Thread: "+Thread.currentThread().getId()
+		// + getDriver().getTitle());
 		getDriver().quit();
 		driverList.remove((int) (long) (Thread.currentThread().getId()));
 	}
 
 	private static DriverType determineEffectiveDriverType(String browser) {
-		DriverType driverType =  DriverType.CHROME;
+		DriverType driverType = DriverType.CHROME;
 		try {
 			driverType = DriverType.valueOf(browser.toUpperCase());
 		} catch (IllegalArgumentException ignored) {
@@ -73,7 +82,8 @@ public class DriverFactory {
 		return driverType;
 	}
 
-	private static WebDriver instantiateAppropriateWebDriver(String remoteURL,DriverType selectedDriverType, String desiredPlatform,MutableCapabilities mutableCapabilities){
+	private static WebDriver instantiateAppropriateWebDriver(String remoteURL, DriverType selectedDriverType,
+			String desiredPlatform, MutableCapabilities mutableCapabilities) {
 		try {
 			if (!remoteURL.equals("")) {
 				URL seleniumGridURL = new URL(remoteURL);
@@ -100,7 +110,7 @@ public class DriverFactory {
 	}
 
 	// Driver Object Method
-	private static synchronized WebDriver initiateDriver(String remoteURL,String browser, String platform) {
+	private static synchronized WebDriver initiateDriver(String remoteURL, String browser, String platform) {
 		// System.out.println("Driver fired for Thread:
 		// "+Thread.currentThread().getId());
 		WebDriver driver = driverList.get((int) (long) (Thread.currentThread().getId()));
@@ -118,85 +128,79 @@ public class DriverFactory {
 					proxy.setHttpProxy(proxyDetails);
 					proxy.setSslProxy(proxyDetails);
 				}
-				DriverType driverType=determineEffectiveDriverType(browser);
+				DriverType driverType = determineEffectiveDriverType(browser);
 				MutableCapabilities mutableCapabilities = driverType.getDesiredCapabilities(proxy);
-				driver=instantiateAppropriateWebDriver(remoteURL, driverType, platform, mutableCapabilities);
+				driver = instantiateAppropriateWebDriver(remoteURL, driverType, platform, mutableCapabilities);
 				driverList.put((int) (long) (Thread.currentThread().getId()), driver);
 
-				/*	if(remoteURL.equals("")){
-					//To Run on local machine
-					if(browser.toLowerCase().contains("fire")){
-						FirefoxProfile profile = new FirefoxProfile();
-						profile.setPreference("browser.download.folderList", 2);
-						profile.setPreference("browser.download.dir", Constant.getDownloadsPath());
-						//System.setProperty("webdriver.gecko.driver", Constant.getFirefoxDriverLocation(platform));
-						driver = new FirefoxDriver(profile);
-						driver= new FirefoxDriver();
-					}else if(browser.toLowerCase().contains("ch")){
-						HashMap<String, Object> chromePrefs = new HashMap<String, Object>();
-						chromePrefs.put("profile.default_content_settings.popups", 0);
-						chromePrefs.put("download.default_directory", Constant.getDownloadsPath());
-						chromePrefs.put("ssl.error_override_allowed", true);
-						ChromeOptions options = new ChromeOptions();
-						options.setExperimentalOption("prefs", chromePrefs);
-						DesiredCapabilities cap = DesiredCapabilities.chrome();
-						cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-						cap.setCapability(ChromeOptions.CAPABILITY, options);
-						//System.setProperty("webdriver.chrome.driver", Constant.getChromeDriverLocation(platform));
-						driver = new ChromeDriver(options);
-
-
-					}else if(browser.toLowerCase().contains("ie")){
-						DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-						capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-						InternetExplorerOptions options= new InternetExplorerOptions();
-						options.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-						options.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-
-						//System.setProperty("webdriver.ie.driver",Constant.getIEDriverLocation());
-						driver = new InternetExplorerDriver(options);						
-					}
-				}else{
-					//To Run on GRID
-					if(browser.toLowerCase().contains("fire") && platform.toLowerCase().contains("lin")){
-						new DesiredCapabilities();
-						DesiredCapabilities capability = DesiredCapabilities.firefox();
-						capability.setBrowserName("firefox");
-						capability.setPlatform(Platform.LINUX);
-						capability.setCapability("marionette", false);
-						driver = new RemoteWebDriver(new URL(remoteURL), capability);
-					}else if(browser.toLowerCase().contains("ch") && platform.toLowerCase().contains("lin")){
-						new DesiredCapabilities();
-						DesiredCapabilities capability = DesiredCapabilities.chrome();
-						capability.setBrowserName("chrome");
-						capability.setPlatform(Platform.LINUX);
-						capability.setCapability("profile.default_content_settings.popups", 0);
-						capability.setCapability("download.default_directory", Constant.getDownloadsPath());
-						capability.setCapability("ssl.error_override_allowed", true);
-						driver = new RemoteWebDriver(new URL(remoteURL), capability);
-					}else if(browser.toLowerCase().contains("ch") && platform.toLowerCase().contains("win")){
-						new DesiredCapabilities();
-						DesiredCapabilities capability = DesiredCapabilities.chrome();
-						capability.setBrowserName("chrome");
-						capability.setPlatform(Platform.WINDOWS);
-						capability.setCapability("profile.default_content_settings.popups", 0);
-						capability.setCapability("download.default_directory", Constant.getDownloadsPath());
-						capability.setCapability("ssl.error_override_allowed", true);
-						driver = new RemoteWebDriver(new URL(remoteURL), capability);
-					}else if(browser.toLowerCase().contains("fire") && platform.toLowerCase().contains("win")){
-						new DesiredCapabilities();
-						DesiredCapabilities capability = DesiredCapabilities.firefox();
-						capability.setBrowserName("firefox");
-						capability.setPlatform(Platform.WINDOWS);
-						driver = new RemoteWebDriver(new URL(remoteURL), capability);
-					}else if(browser.toLowerCase().contains("ie") && platform.toLowerCase().contains("win")){
-						new DesiredCapabilities();
-						DesiredCapabilities capability = DesiredCapabilities.internetExplorer();
-						capability.setBrowserName("ie");
-						capability.setPlatform(Platform.WINDOWS);
-						driver = new RemoteWebDriver(new URL(remoteURL), capability);
-					}
-				}
+				/*
+				 * if(remoteURL.equals("")){ //To Run on local machine
+				 * if(browser.toLowerCase().contains("fire")){ FirefoxProfile profile = new
+				 * FirefoxProfile(); profile.setPreference("browser.download.folderList", 2);
+				 * profile.setPreference("browser.download.dir", Constant.getDownloadsPath());
+				 * //System.setProperty("webdriver.gecko.driver",
+				 * Constant.getFirefoxDriverLocation(platform)); driver = new
+				 * FirefoxDriver(profile); driver= new FirefoxDriver(); }else
+				 * if(browser.toLowerCase().contains("ch")){ HashMap<String, Object> chromePrefs
+				 * = new HashMap<String, Object>();
+				 * chromePrefs.put("profile.default_content_settings.popups", 0);
+				 * chromePrefs.put("download.default_directory", Constant.getDownloadsPath());
+				 * chromePrefs.put("ssl.error_override_allowed", true); ChromeOptions options =
+				 * new ChromeOptions(); options.setExperimentalOption("prefs", chromePrefs);
+				 * DesiredCapabilities cap = DesiredCapabilities.chrome();
+				 * cap.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+				 * cap.setCapability(ChromeOptions.CAPABILITY, options);
+				 * //System.setProperty("webdriver.chrome.driver",
+				 * Constant.getChromeDriverLocation(platform)); driver = new
+				 * ChromeDriver(options);
+				 * 
+				 * 
+				 * }else if(browser.toLowerCase().contains("ie")){ DesiredCapabilities
+				 * capabilities = DesiredCapabilities.internetExplorer();
+				 * capabilities.setCapability(InternetExplorerDriver.
+				 * INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+				 * InternetExplorerOptions options= new InternetExplorerOptions();
+				 * options.setCapability(InternetExplorerDriver.
+				 * INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+				 * options.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+				 * 
+				 * //System.setProperty("webdriver.ie.driver",Constant.getIEDriverLocation());
+				 * driver = new InternetExplorerDriver(options); } }else{ //To Run on GRID
+				 * if(browser.toLowerCase().contains("fire") &&
+				 * platform.toLowerCase().contains("lin")){ new DesiredCapabilities();
+				 * DesiredCapabilities capability = DesiredCapabilities.firefox();
+				 * capability.setBrowserName("firefox"); capability.setPlatform(Platform.LINUX);
+				 * capability.setCapability("marionette", false); driver = new
+				 * RemoteWebDriver(new URL(remoteURL), capability); }else
+				 * if(browser.toLowerCase().contains("ch") &&
+				 * platform.toLowerCase().contains("lin")){ new DesiredCapabilities();
+				 * DesiredCapabilities capability = DesiredCapabilities.chrome();
+				 * capability.setBrowserName("chrome"); capability.setPlatform(Platform.LINUX);
+				 * capability.setCapability("profile.default_content_settings.popups", 0);
+				 * capability.setCapability("download.default_directory",
+				 * Constant.getDownloadsPath());
+				 * capability.setCapability("ssl.error_override_allowed", true); driver = new
+				 * RemoteWebDriver(new URL(remoteURL), capability); }else
+				 * if(browser.toLowerCase().contains("ch") &&
+				 * platform.toLowerCase().contains("win")){ new DesiredCapabilities();
+				 * DesiredCapabilities capability = DesiredCapabilities.chrome();
+				 * capability.setBrowserName("chrome");
+				 * capability.setPlatform(Platform.WINDOWS);
+				 * capability.setCapability("profile.default_content_settings.popups", 0);
+				 * capability.setCapability("download.default_directory",
+				 * Constant.getDownloadsPath());
+				 * capability.setCapability("ssl.error_override_allowed", true); driver = new
+				 * RemoteWebDriver(new URL(remoteURL), capability); }else
+				 * if(browser.toLowerCase().contains("fire") &&
+				 * platform.toLowerCase().contains("win")){ new DesiredCapabilities();
+				 * DesiredCapabilities capability = DesiredCapabilities.firefox();
+				 * capability.setBrowserName("firefox");
+				 * capability.setPlatform(Platform.WINDOWS); driver = new RemoteWebDriver(new
+				 * URL(remoteURL), capability); }else if(browser.toLowerCase().contains("ie") &&
+				 * platform.toLowerCase().contains("win")){ new DesiredCapabilities();
+				 * DesiredCapabilities capability = DesiredCapabilities.internetExplorer();
+				 * capability.setBrowserName("ie"); capability.setPlatform(Platform.WINDOWS);
+				 * driver = new RemoteWebDriver(new URL(remoteURL), capability); } }
 				 */
 				// System.out.println("Driver added in HashMap for Thread:
 				// "+Thread.currentThread().getId());
@@ -206,42 +210,46 @@ public class DriverFactory {
 		}
 		return driver;
 	}
-	
-	
+
 	/**
-	 * Adding Chrome driver service for faster chrome opening and closing 
+	 * Adding Chrome driver service for faster chrome opening and closing
+	 * 
 	 * @author Shailendra 05-Jan-2020
 	 **/
 	public static ChromeDriverService service;
 	private static boolean BOOL_CHROME_SERVICE = false;
 
 	/**
-	 * Call this method once all ChromeDriver Instances are Quitted
-	 * Will STOP the chrome driver service once <test> tag execution ends
-	 * Added on <test> level, because only at this level framework gets 
-	 * knowledge about browser type
+	 * Call this method once all ChromeDriver Instances are Quitted Will STOP the
+	 * chrome driver service once <test> tag execution ends Added on <test> level,
+	 * because only at this level framework gets knowledge about browser type
+	 * 
 	 * @param testDataMap holds all sorts of information of TestNg.xml file
 	 * @author Shailendra 05-Jan-2020
 	 */
 	public static void stopChromeDriverService() {
-		if (BOOL_CHROME_SERVICE) {
-			service.stop();	
+		try {
+			if (BOOL_CHROME_SERVICE) {
+				service.stop();
+			}
+		} catch (Exception e) {
+			//
 		}
 	}
 
 	/**
-	 * Call this method before starting any ChromeDriver Instances
-	 * Will START the chrome driver service once <test> tag execution ends
-	 * Added on <test> level, because only at this level framework gets 
-	 * knowledge about browser type
+	 * Call this method before starting any ChromeDriver Instances Will START the
+	 * chrome driver service once <test> tag execution ends Added on <test> level,
+	 * because only at this level framework gets knowledge about browser type
+	 * 
 	 * @param testDataMap holds all sorts of information of TestNg.xml file
 	 * @author Shailendra 05-Jan-2020
 	 */
 	public static void startChromeDriverService(HashMap<TestNGKeys, String> testDataMap) {
-		if(testDataMap.get(TestNGKeys.browser).toUpperCase().contains("CHROME")) {
+		if (testDataMap.get(TestNGKeys.browser).toUpperCase().contains("CHROME")) {
 			try {
-				service = new ChromeDriverService.Builder().usingDriverExecutable(new File(Constant.getChromeDriverLocation()))
-						.usingAnyFreePort().build();
+				service = new ChromeDriverService.Builder()
+						.usingDriverExecutable(new File(Constant.getChromeDriverLocation())).usingAnyFreePort().build();
 				service.start();
 				BOOL_CHROME_SERVICE = true;
 			} catch (IOException e) {
